@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sound Control</title>
+    <script>
+        async function playSound(sound) {
+            const loop = document.getElementById('loop').checked;
+            const response = await fetch('/play', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sound: sound, loop: loop })
+            });
+            const data = await response.json();
+            document.getElementById('logs').innerText = `Playing ${sound} ${loop ? 'in loop' : ''}.`;
+        }
+
+        async function stopSound() {
+            await fetch('/stop', { method: 'POST' });
+            document.getElementById('logs').innerText = 'Stopped playing.';
+        }
+    </script>
+</head>
+<body>
+    <h1>Sound Control</h1>
+    <button onclick="playSound('beep1')">Play Beep1</button>
+    <button onclick="playSound('beep2')">Play Beep2</button>
+    <button onclick="playSound('beep3')">Play Beep3</button>
+    <button onclick="playSound('msbuzzer')">Play MS Buzzer</button>
+    <button onclick="playSound('uvb76')">Play UVB-76 WebSDR</button>
+    <br><br>
+    <label>
+        <input type="checkbox" id="loop"> Loop
+    </label>
+    <br><br>
+    <button onclick="stopSound()">Stop</button>
+    <br><br>
+    <div id="logs"></div>
+</body>
+</html>

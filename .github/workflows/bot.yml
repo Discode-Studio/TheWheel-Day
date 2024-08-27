@@ -1,0 +1,52 @@
+name: UVB-76 BOT
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"  # Toutes les 6 heures
+  workflow_dispatch:       # Permet de déclencher manuellement ce workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install discord.py selenium webdriver-manager
+        pip install pynacl
+        sudo apt update
+        sudo apt install ffmpeg
+        sudo apt update
+        sudo apt install pulseaudio
+        pip install Flask discord.py discord.py[voice]
+        pip install aiohttp
+
+    - name: Install Chrome and ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget
+        # Install Google Chrome
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo dpkg -i google-chrome-stable_current_amd64.deb
+        sudo apt-get -f install
+        # Install ChromeDriver
+        CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)
+        wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+        sudo mv chromedriver /usr/local/bin/chromedriver
+        sudo chmod +x /usr/local/bin/chromedriver
+
+    - name: Run Discord Bot
+      env:
+        DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+      run: |
+        python bot.py
