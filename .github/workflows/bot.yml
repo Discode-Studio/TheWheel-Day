@@ -2,7 +2,7 @@ name: UVB-76 BOT
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # Toutes les 6 heures
+    - cron: "1 */6 * * *"  # Toutes les 6 heures
   workflow_dispatch:       # Permet de déclencher manuellement ce workflow
 
 jobs:
