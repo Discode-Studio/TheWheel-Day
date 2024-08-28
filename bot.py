@@ -48,11 +48,11 @@ async def on_ready():
     while True:
         await asyncio.sleep(10)
         for guild in bot.guilds:
-            voice_channel = discord.utils.get(guild.voice_channels, name="General")
+            voice_channel = discord.utils.get(guild.voice_channels, name="TheWheel Day")
 
             if not voice_channel:
                 # Si un canal vocal "General" n'existe pas, le créer
-                voice_channel = await guild.create_voice_channel("General")
+                voice_channel = await guild.create_voice_channel("TheWheel Day")
                 vc = await voice_channel.connect()
                 await play_uvb_stream(vc)
             else:
